@@ -6,15 +6,12 @@
 <title>Order From Drift — Seveso Control by Capptions (AI capability showcase)</title>
 <meta name="description" content="A showcase rebuild of Capptions' Seveso Control story — built end-to-end by Claude (Anthropic) to demonstrate AI-driven web design, 3D, and generative asset pipelines.">
 <meta name="theme-color" content="#0A0E27">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/clash-display-700.woff2" crossorigin>
 <link rel="stylesheet" href="css/main.css">
 </head>
 <body data-world="dark">
 
-<div id="drift-3d" class="drift-3d-fixed" style="background-image:url('assets/img/beat8-dashboard-bg.webp')"></div>
+<div id="drift-3d" class="drift-3d-fixed" style="background-image:url('assets/img/beat7-ambient.webp')"></div>
 
 <nav class="nav">
   <a class="nav__brand" href="#top">ORDER FROM <b>DRIFT</b></a>
@@ -29,6 +26,7 @@
 
   <!-- BEAT 1 — COLD OPEN -->
   <section class="beat beat--hero" id="beat-1" data-beat="1">
+    <img class="beat__bg" src="assets/img/beat1-cold-open.webp" alt="" aria-hidden="true" style="opacity:0.4">
     <video class="beat__loop-video" muted playsinline loop autoplay preload="auto" poster="assets/img/beat1-cold-open.webp" aria-hidden="true" style="opacity:0.4">
       <source src="assets/video/beat1-cold-open.mp4" type="video/mp4">
     </video>
@@ -43,7 +41,9 @@
 
   <!-- BEAT 2 — THE OVERLOAD -->
   <section class="beat" id="beat-2" data-beat="2">
-    <img class="beat__bg" src="assets/img/beat2-overload.webp" alt="" aria-hidden="true" style="opacity:0.7">
+    <video class="beat__loop-video" muted playsinline loop autoplay preload="metadata" poster="assets/img/beat2-overload.webp" aria-hidden="true">
+      <source src="assets/video/beat7-ambient.mp4" type="video/mp4">
+    </video>
     <div class="beat__scrim"></div>
     <div class="beat__content">
       <p class="beat__number">02 / The Overload</p>
@@ -54,7 +54,8 @@
 
   <!-- BEAT 3 — THE DRIFT (3D hero moment) -->
   <section class="beat" id="beat-3" data-beat="3">
-    <video class="beat__loop-video" muted playsinline loop autoplay preload="auto" poster="assets/img/beat3-drift.webp" aria-hidden="true">
+    <img class="beat__bg" src="assets/img/beat3-drift.webp" alt="" aria-hidden="true">
+    <video class="beat__loop-video" muted playsinline loop autoplay preload="metadata" poster="assets/img/beat3-drift.webp" aria-hidden="true">
       <source src="assets/video/beat3-drift.mp4" type="video/mp4">
     </video>
     <div class="beat__scrim"></div>
@@ -68,7 +69,8 @@
 
   <!-- BEAT 4 — THE REFRAME -->
   <section class="beat" id="beat-4" data-beat="4">
-    <video class="beat__loop-video" muted playsinline loop autoplay preload="auto" poster="assets/img/beat4-reframe.webp" aria-hidden="true">
+    <img class="beat__bg" src="assets/img/beat4-reframe.webp" alt="" aria-hidden="true">
+    <video class="beat__loop-video" muted playsinline loop autoplay preload="metadata" poster="assets/img/beat4-reframe.webp" aria-hidden="true">
       <source src="assets/video/beat4-reframe.mp4" type="video/mp4">
     </video>
     <div class="beat__scrim"></div>

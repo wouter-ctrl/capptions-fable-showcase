@@ -1,5 +1,27 @@
 /* Order From Drift — Capptions Seveso Control showcase
    Palette/type per DESIGN.md. */
+
+/* Self-hosted (Manrope + JetBrains Mono ship as single variable-weight
+   files from Google; Clash Display needs its two static weights from
+   Fontshare) - no external font CDN dependency for a page whose whole
+   identity is its type. */
+@font-face {
+  font-family: 'Manrope'; font-style: normal; font-weight: 400 800;
+  font-display: swap; src: url('../assets/fonts/manrope-variable.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400 700;
+  font-display: swap; src: url('../assets/fonts/jetbrains-mono-variable.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Clash Display'; font-style: normal; font-weight: 600;
+  font-display: swap; src: url('../assets/fonts/clash-display-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Clash Display'; font-style: normal; font-weight: 700;
+  font-display: swap; src: url('../assets/fonts/clash-display-700.woff2') format('woff2');
+}
+
 :root {
   --abyss: #0A0E27;
   --command: #141B4D;
@@ -82,7 +104,20 @@ a { color: inherit; }
   margin: 0 0 24px;
   text-wrap: balance;
 }
-.beat__statement em { font-style: normal; background: var(--aurora); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.beat__statement em {
+  font-style: normal; background: var(--aurora);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+/* If background-clip:text doesn't paint (older WebViews, print, forced-colors),
+   the emphasis words are load-bearing headline text - never let them go
+   invisible via a stranded `color:transparent`. */
+@supports not (background-clip: text) {
+  .beat__statement em { -webkit-text-fill-color: var(--teal); color: var(--teal); background: none; }
+}
+@media (forced-colors: active) {
+  .beat__statement em { -webkit-text-fill-color: CanvasText; color: CanvasText; background: none; }
+}
 .beat__sub { font-size: clamp(16px, 1.3vw, 20px); color: rgba(244,240,232,0.72); max-width: 46em; text-wrap: pretty; }
 
 /* ---------- Hero / drift 3D (page-fixed, shows through transparent beat bgs) ---------- */
@@ -93,7 +128,7 @@ a { color: inherit; }
 }
 .beat--hero .beat__scrim { background: linear-gradient(180deg, rgba(10,14,39,0.1) 0%, rgba(10,14,39,0.55) 70%, var(--abyss) 100%); }
 .beat, .footer { position: relative; z-index: 1; }
-[id] { scroll-margin-top: 100px; }
+#command-center, #resolved, #top { scroll-margin-top: 100px; }
 
 /* ---------- Loop video moments ---------- */
 .beat__loop-video {
@@ -104,11 +139,14 @@ a { color: inherit; }
 /* ---------- Dashboard (beat 5) ---------- */
 .dash {
   position: relative; z-index: 2;
-  background: linear-gradient(160deg, rgba(20,27,77,0.85), rgba(10,14,39,0.92));
+  background: linear-gradient(160deg, rgba(20,27,77,0.88), rgba(10,14,39,0.95)),
+              url('../assets/img/beat8-dashboard-bg.webp');
+  background-size: cover; background-position: center;
   border: 1px solid rgba(40,224,200,0.18);
   border-radius: var(--radius);
   padding: clamp(20px, 3vw, 36px);
   max-width: 900px;
+  -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   box-shadow: 0 40px 100px -30px rgba(0,0,0,0.6);
 }

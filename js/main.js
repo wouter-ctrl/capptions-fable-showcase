@@ -10,6 +10,12 @@
   var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var driftEl = document.querySelector('.drift-3d-fixed');
 
+  function setCardReady(card, ready) {
+    card.classList.toggle('dash__card--ready', ready);
+    var t = card.querySelector('.dash__status-text');
+    if (t) t.textContent = ready ? 'Ready' : 'Checking…';
+  }
+
   if (REDUCED) {
     // Autoplay videos still fire from the HTML attribute regardless of JS;
     // stop them explicitly and fall back to their poster/static bg.
@@ -22,10 +28,7 @@
 
   if (REDUCED || !window.gsap || !window.ScrollTrigger) {
     document.querySelectorAll('.beat__content').forEach(function (el) { el.style.opacity = 1; });
-    document.querySelectorAll('.dash__card').forEach(function (el, i) {
-      el.classList.add('dash__card--ready');
-      el.querySelector('.dash__status-text').textContent = 'Ready';
-    });
+    document.querySelectorAll('.dash__card').forEach(function (el) { setCardReady(el, true); });
     return;
   }
 
@@ -33,11 +36,22 @@
 
   var lenis = null;
   if (window.Lenis) {
-    lenis = new Lenis({ lerp: 0.14 });
+    lenis = new Lenis({ lerp: 0.14, smoothTouch: false, syncTouch: false });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
     gsap.ticker.lagSmoothing(0);
   }
+
+  // Smooth in-page nav (Lenis owns scroll, so native anchor jump would fight it).
+  document.querySelectorAll('.nav__links a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = a.getAttribute('href');
+      var target = document.querySelector(id);
+      if (!target || !lenis) return;
+      e.preventDefault();
+      lenis.scrollTo(target, { offset: -100 });
+    });
+  });
 
   // Reveal each beat's copy as it enters.
   gsap.utils.toArray('.beat__content').forEach(function (el) {
@@ -83,7 +97,14 @@
       trigger: beat3, start: 'top bottom', end: 'bottom top',
       onEnter: function () { fadeDrift(0.55); },
       onLeave: function () { if (!isInView(beat5)) fadeDrift(0); },
-      onEnterBack: function () { fadeDrift(0.55); },
+      onEnterBack: function () {
+        fadeDrift(0.55);
+        // Coming back up from beat 4/5, the order-scrub may have clamped
+        // the drivers to its own extremes (full order, zero drift) - reset
+        // to beat-3's own baseline so re-entering doesn't visually "pop"
+        // straight from a resolved ring to full chaos or vice versa.
+        var s = scene(); if (s) { s.setOrder(0); s.setDrift(0.35); }
+      },
       onLeaveBack: function () { if (!isInView(beat1)) fadeDrift(0); }
     });
     ScrollTrigger.create({
@@ -91,16 +112,20 @@
       onUpdate: function (self) {
         var s = scene(); var d = 0.35 + self.progress * 0.65;
         if (s) s.setDrift(d);
+        // The on-screen number is a separate, more conservative scale than
+        // the 3D driver above - "100% compliance gap" reads as apocalyptic
+        // to a compliance-literate audience; cap it at a credible "growing
+        // risk" ceiling instead.
         var readout = document.getElementById('gap-readout');
-        if (readout) readout.textContent = (d * 100).toFixed(1) + '%';
+        if (readout) readout.textContent = (35 + self.progress * 33).toFixed(1) + '%';
       }
     });
   }
 
   // The "order" payoff: chaos snaps to the 7-node lattice through beat 5,
-  // and — this is the fix for pass-1 finding #3 — the field stays visible
-  // (faint) through beat 6 so the resolved copy and the resolved visual
-  // land together, instead of the field vanishing one beat early.
+  // and the field stays visible (faint) through beat 6 so the resolved
+  // copy and the resolved visual land together instead of the field
+  // vanishing one beat early.
   if (beat5) {
     ScrollTrigger.create({
       trigger: beat5, start: 'top bottom', end: 'bottom center',
@@ -112,22 +137,17 @@
       onUpdate: function (self) { var s = scene(); if (s) { s.setOrder(self.progress); s.setDrift(1 - self.progress); } }
     });
 
-    // Dashboard cards resolve one by one as the section comes into view -
-    // the visible payoff of "order", instead of seven identical static rows.
-    ScrollTrigger.create({
-      trigger: beat5, start: 'top 65%',
-      onEnter: function () { resolveDashboard(); },
-      once: true
-    });
-  }
-  function resolveDashboard() {
+    // Dashboard cards resolve as the section scrolls through - scrub-linked
+    // (not a wall-clock stagger) so it can never be "missed" by a fast
+    // scroll and it un-resolves cleanly on scroll-back rather than being a
+    // one-shot that can only ever fire once.
     var cards = gsap.utils.toArray('.dash__card');
-    cards.forEach(function (card, i) {
-      gsap.delayedCall(i * 0.12, function () {
-        card.classList.add('dash__card--ready');
-        var t = card.querySelector('.dash__status-text');
-        if (t) t.textContent = 'Ready';
-      });
+    ScrollTrigger.create({
+      trigger: beat5, start: 'top 75%', end: 'top 30%', scrub: true,
+      onUpdate: function (self) {
+        var readyCount = Math.round(self.progress * cards.length);
+        cards.forEach(function (card, i) { setCardReady(card, i < readyCount); });
+      }
     });
   }
 

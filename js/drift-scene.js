@@ -32,7 +32,8 @@
   var VIOLET = new THREE.Color(0x6c4cf0);
   var GOLD = new THREE.Color(0xf5c36b);
 
-  var COUNT = reduced ? 0 : 5200;
+  var isSmallViewport = window.innerWidth < 760;
+  var COUNT = reduced ? 0 : (isSmallViewport ? 2400 : 5200);
   var positions = new Float32Array(COUNT * 3);
   var colors = new Float32Array(COUNT * 3);
   var seeds = new Float32Array(COUNT);
@@ -134,7 +135,9 @@
       geo.attributes.position.needsUpdate = true;
       updateRibbon(ribbonA, 1);
       updateRibbon(ribbonB, -1);
-      points.rotation.y = Math.sin(t * 0.6) * 0.1 + uOrder * 0.15;
+      // keep the 7-node ring legibly face-on at full order - too much
+      // y-rotation turns 7 distinguishable nodes into a squashed ellipse
+      points.rotation.y = Math.sin(t * 0.6) * 0.1 * (1 - uOrder) + uOrder * 0.06;
       renderer.render(scene, camera);
       requestAnimationFrame(tick);
     })();
