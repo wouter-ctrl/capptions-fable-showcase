@@ -46,10 +46,10 @@
     <tr><td>Gold Filament</td><td><code>#F5C36B</code></td><td>rare highlight, CTAs</td></tr>
     <tr><td>Bone</td><td><code>#F4F0E8</code></td><td>resolved-state background</td></tr>
   </table>
-  <p>Type: <a href="https://www.fontshare.com/fonts/clash-display" target="_blank">Clash Display</a> (Fontshare, free) for cinematic statements, <a href="https://fonts.google.com/specimen/Manrope" target="_blank">Manrope</a> for body/UI, <a href="https://fonts.google.com/specimen/JetBrains+Mono" target="_blank">JetBrains Mono</a> for data. All free, all embeddable, zero build step.</p>
+  <p>Type: <a href="https://www.fontshare.com/fonts/clash-display" target="_blank" rel="noopener">Clash Display</a> (Fontshare, free) for cinematic statements, <a href="https://fonts.google.com/specimen/Manrope" target="_blank" rel="noopener">Manrope</a> for body/UI, <a href="https://fonts.google.com/specimen/JetBrains+Mono" target="_blank" rel="noopener">JetBrains Mono</a> for data. All free, all embeddable, zero build step.</p>
 
   <h2>3. Generating the imagery</h2>
-  <p>Eight illustrations were generated from a single "style spine" paragraph appended to every prompt (palette, lighting, mood, format) so the set reads as one series instead of eight random images. Generation used <strong>GPT Image 2</strong> via the <a href="https://github.com/oakplank/claude-gpt-image-bridge" target="_blank">claude-gpt-image-bridge</a> skill, which drives OpenAI's image model through the <code>codex</code> CLI on an existing ChatGPT subscription — no separate API key.</p>
+  <p>Eight illustrations were generated from a single "style spine" paragraph appended to every prompt (palette, lighting, mood, format) so the set reads as one series instead of eight random images. Generation used <strong>GPT Image 2</strong> via the <a href="https://github.com/oakplank/claude-gpt-image-bridge" target="_blank" rel="noopener">claude-gpt-image-bridge</a> skill, which drives OpenAI's image model through the <code>codex</code> CLI on an existing ChatGPT subscription — no separate API key.</p>
   <pre>~/.claude/skills/gpt-image-bridge/bin/gpt-image-2 "&lt;prompt + style spine&gt;" out.png --size 1536x1024</pre>
   <p>On this machine, codex's sandboxed shell couldn't perform its own final copy step (Windows policy), so a thin wrapper snapshotted <code>~/.codex/generated_images/</code> before and after each call and copied whatever new file appeared. If you hit the same "no PNG produced" error, that's the fix.</p>
 
