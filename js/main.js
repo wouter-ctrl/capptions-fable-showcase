@@ -3,14 +3,29 @@
    - reveal-on-scroll for beat copy
    - the fixed 3D Drift Field's visibility + uDrift/uOrder per beat
    - the compliance-gap mono readout in beat 3
+   - the command-center dashboard resolving card by card
    ============================================================ */
 (function () {
   'use strict';
   var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var driftEl = document.querySelector('.drift-3d-fixed');
 
+  if (REDUCED) {
+    // Autoplay videos still fire from the HTML attribute regardless of JS;
+    // stop them explicitly and fall back to their poster/static bg.
+    document.querySelectorAll('.beat__loop-video').forEach(function (v) {
+      v.pause();
+      v.removeAttribute('autoplay');
+      v.style.display = 'none';
+    });
+  }
+
   if (REDUCED || !window.gsap || !window.ScrollTrigger) {
     document.querySelectorAll('.beat__content').forEach(function (el) { el.style.opacity = 1; });
+    document.querySelectorAll('.dash__card').forEach(function (el, i) {
+      el.classList.add('dash__card--ready');
+      el.querySelector('.dash__status-text').textContent = 'Ready';
+    });
     return;
   }
 
@@ -36,11 +51,18 @@
   var beat1 = document.getElementById('beat-1');
   var beat3 = document.getElementById('beat-3');
   var beat5 = document.getElementById('beat-5');
+  var beat6 = document.getElementById('beat-6');
   var driftScene = null;
   function scene() { return driftScene || (driftScene = window.__driftScene); }
 
   function fadeDrift(opacity) {
     if (driftEl) gsap.to(driftEl, { opacity: opacity, duration: 0.6, overwrite: true });
+  }
+
+  function isInView(el) {
+    if (!el) return false;
+    var r = el.getBoundingClientRect();
+    return r.top < window.innerHeight && r.bottom > 0;
   }
 
   if (beat1) {
@@ -75,23 +97,46 @@
     });
   }
 
+  // The "order" payoff: chaos snaps to the 7-node lattice through beat 5,
+  // and — this is the fix for pass-1 finding #3 — the field stays visible
+  // (faint) through beat 6 so the resolved copy and the resolved visual
+  // land together, instead of the field vanishing one beat early.
   if (beat5) {
     ScrollTrigger.create({
       trigger: beat5, start: 'top bottom', end: 'bottom center',
       onEnter: function () { fadeDrift(0.35); },
-      onLeave: function () { fadeDrift(0); },
       onEnterBack: function () { fadeDrift(0.35); }
     });
     ScrollTrigger.create({
       trigger: beat5, start: 'top 70%', end: 'center center', scrub: true,
       onUpdate: function (self) { var s = scene(); if (s) { s.setOrder(self.progress); s.setDrift(1 - self.progress); } }
     });
+
+    // Dashboard cards resolve one by one as the section comes into view -
+    // the visible payoff of "order", instead of seven identical static rows.
+    ScrollTrigger.create({
+      trigger: beat5, start: 'top 65%',
+      onEnter: function () { resolveDashboard(); },
+      once: true
+    });
+  }
+  function resolveDashboard() {
+    var cards = gsap.utils.toArray('.dash__card');
+    cards.forEach(function (card, i) {
+      gsap.delayedCall(i * 0.12, function () {
+        card.classList.add('dash__card--ready');
+        var t = card.querySelector('.dash__status-text');
+        if (t) t.textContent = 'Ready';
+      });
+    });
   }
 
-  function isInView(el) {
-    if (!el) return false;
-    var r = el.getBoundingClientRect();
-    return r.top < window.innerHeight && r.bottom > 0;
+  if (beat6) {
+    ScrollTrigger.create({
+      trigger: beat6, start: 'top bottom', end: 'bottom 40%',
+      onLeave: function () { fadeDrift(0); },
+      onEnterBack: function () { fadeDrift(0.2); }
+    });
   }
 
   // Ensure loop videos actually autoplay (some mobile browsers need a nudge).

@@ -9,6 +9,9 @@
   --gold: #F5C36B;
   --bone: #F4F0E8;
   --aurora: linear-gradient(120deg, var(--teal) 0%, var(--violet) 100%);
+  /* abyss-on-violet fails AA contrast (3.56:1) at the gradient's far end -
+     text-bearing surfaces (buttons) use this teal-biased variant instead */
+  --aurora-text-safe: linear-gradient(120deg, var(--teal) 0%, var(--teal) 55%, var(--violet) 100%);
   --display: 'Clash Display', 'Manrope', sans-serif;
   --body: 'Manrope', sans-serif;
   --mono: 'JetBrains Mono', monospace;
@@ -89,7 +92,8 @@ a { color: inherit; }
   opacity: 0.9; transition: opacity 0.6s ease;
 }
 .beat--hero .beat__scrim { background: linear-gradient(180deg, rgba(10,14,39,0.1) 0%, rgba(10,14,39,0.55) 70%, var(--abyss) 100%); }
-.beat, .footer, .nav { position: relative; z-index: 1; }
+.beat, .footer { position: relative; z-index: 1; }
+[id] { scroll-margin-top: 100px; }
 
 /* ---------- Loop video moments ---------- */
 .beat__loop-video {
@@ -116,8 +120,10 @@ a { color: inherit; }
 }
 .dash__card b { font-family: var(--mono); font-size: 11px; color: var(--gold); opacity: 0.8; margin-right: 8px; }
 .dash__el { font-size: 14px; font-weight: 600; }
-.dash__status { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--teal); }
-.dash__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 10px var(--teal); }
+.dash__status { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--coral); transition: color 0.4s ease; }
+.dash__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--coral); box-shadow: 0 0 10px var(--coral); transition: background 0.4s ease, box-shadow 0.4s ease; }
+.dash__card--ready .dash__dot { background: var(--teal); box-shadow: 0 0 10px var(--teal); }
+.dash__card--ready .dash__status { color: var(--teal); }
 
 /* ---------- CTA (beat 6, resolved / warm) ---------- */
 .beat--resolved { background: var(--bone); color: var(--command); }
@@ -127,7 +133,7 @@ a { color: inherit; }
   display: inline-flex; align-items: center; gap: 10px;
   padding: 15px 30px; border-radius: 999px;
   font-family: var(--mono); font-size: 13px; letter-spacing: 0.05em;
-  background: var(--aurora); color: var(--abyss); font-weight: 700;
+  background: var(--aurora-text-safe); color: var(--abyss); font-weight: 700;
   text-decoration: none; margin-top: 32px;
 }
 
