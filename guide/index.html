@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How this was built — Order From Drift guide</title>
+<meta name="description" content="Methodology: how the Order From Drift showcase was built end-to-end with Claude Code, GPT-Image-2, Higgsfield, and Three.js.">
+<meta name="theme-color" content="#0A0E27">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap">
+<link rel="stylesheet" href="../css/main.css">
+<style>
+  .guide { max-width: 780px; margin: 0 auto; padding: 140px 24px 100px; }
+  .guide h1 { font-family: var(--display); font-size: clamp(32px,5vw,56px); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .guide p.lede { color: rgba(244,240,232,0.72); font-size: 18px; margin-bottom: 48px; }
+  .guide h2 { font-family: var(--display); font-size: 26px; margin-top: 56px; margin-bottom: 14px; color: var(--teal); }
+  .guide h3 { font-size: 16px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold); margin-top: 28px; }
+  .guide p, .guide li { font-size: 16px; line-height: 1.7; color: rgba(244,240,232,0.85); }
+  .guide code { font-family: var(--mono); font-size: 14px; background: rgba(40,224,200,0.1); padding: 2px 6px; border-radius: 4px; color: var(--teal); }
+  .guide pre { background: var(--command); border: 1px solid rgba(40,224,200,0.15); border-radius: 10px; padding: 18px 20px; overflow-x: auto; font-family: var(--mono); font-size: 13px; line-height: 1.6; }
+  .guide ol, .guide ul { padding-left: 22px; }
+  .guide table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+  .guide th, .guide td { text-align: left; padding: 10px 12px; border-bottom: 1px solid rgba(244,240,232,0.12); }
+  .guide th { font-family: var(--mono); color: var(--gold); font-weight: 600; }
+  .back { display: inline-block; margin-bottom: 40px; font-family: var(--mono); font-size: 13px; color: var(--teal); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="guide">
+  <a class="back" href="../">&larr; Back to the showcase</a>
+  <h1>How this was built</h1>
+  <p class="lede">Everything on the main page — copy, art direction, 8 generated illustrations, 4 animated loops, the custom Three.js scene, and the deploy — was produced by Claude (Anthropic) inside Claude Code, working from a single instruction, autonomously, end to end. This page is the honest methodology so you can reproduce it.</p>
+
+  <h2>1. The brief</h2>
+  <p>The starting point was one message: rebuild an existing client site (Capptions' "Seveso Control") as a standalone capability-demo — keep the brand and story, push the execution into 3D, generative imagery, and cinematic pacing, then ship it to GitHub Pages with this guide alongside it. No further back-and-forth until done.</p>
+
+  <h2>2. Creative direction</h2>
+  <p>Rather than jumping straight to code, a dedicated creative-direction pass ran first: a model was given the brand DNA (palette, type, the existing scroll-film metaphor) and the regulatory content (Seveso-III / BRZO's 7 VBS elements), and asked to return a structured brief — exact hex codes, named fonts, a concrete buildable 3D concept, a tightened narrative arc, and a full set of image-generation prompts written to read as one cohesive series.</p>
+  <p><em>Note:</em> the brief was requested from Fable 5 first (this project's namesake), but that session was out of usage credits at build time, so Opus produced the brief instead. Worth knowing if you're trying to reproduce the exact creative voice.</p>
+
+  <h3>Locked palette</h3>
+  <table>
+    <tr><th>Name</th><th>Hex</th><th>Role</th></tr>
+    <tr><td>Abyss Navy</td><td><code>#0A0E27</code></td><td>background</td></tr>
+    <tr><td>Aurora Teal</td><td><code>#28E0C8</code></td><td>primary accent</td></tr>
+    <tr><td>Drift Violet</td><td><code>#6C4CF0</code></td><td>secondary accent (light/line only)</td></tr>
+    <tr><td>Ember Coral</td><td><code>#FF6B54</code></td><td>risk / highlight</td></tr>
+    <tr><td>Gold Filament</td><td><code>#F5C36B</code></td><td>rare highlight, CTAs</td></tr>
+    <tr><td>Bone</td><td><code>#F4F0E8</code></td><td>resolved-state background</td></tr>
+  </table>
+  <p>Type: <a href="https://www.fontshare.com/fonts/clash-display" target="_blank">Clash Display</a> (Fontshare, free) for cinematic statements, <a href="https://fonts.google.com/specimen/Manrope" target="_blank">Manrope</a> for body/UI, <a href="https://fonts.google.com/specimen/JetBrains+Mono" target="_blank">JetBrains Mono</a> for data. All free, all embeddable, zero build step.</p>
+
+  <h2>3. Generating the imagery</h2>
+  <p>Eight illustrations were generated from a single "style spine" paragraph appended to every prompt (palette, lighting, mood, format) so the set reads as one series instead of eight random images. Generation used <strong>GPT Image 2</strong> via the <a href="https://github.com/oakplank/claude-gpt-image-bridge" target="_blank">claude-gpt-image-bridge</a> skill, which drives OpenAI's image model through the <code>codex</code> CLI on an existing ChatGPT subscription — no separate API key.</p>
+  <pre>~/.claude/skills/gpt-image-bridge/bin/gpt-image-2 "&lt;prompt + style spine&gt;" out.png --size 1536x1024</pre>
+  <p>On this machine, codex's sandboxed shell couldn't perform its own final copy step (Windows policy), so a thin wrapper snapshotted <code>~/.codex/generated_images/</code> before and after each call and copied whatever new file appeared. If you hit the same "no PNG produced" error, that's the fix.</p>
+
+  <h2>4. Animating key stills</h2>
+  <p>Four of the eight stills became short (6s) seamless motion loops via the <strong>Higgsfield</strong> MCP, model <code>kling3_0</code> in <code>pro</code> mode, silent (<code>sound: off</code>), each driven by a start-image + a motion-only prompt (no new subjects, just "what moves and how"). Flow: <code>media_upload</code> (presigned URL) &rarr; upload bytes &rarr; <code>media_confirm</code> &rarr; <code>generate_video</code> &rarr; poll <code>job_status</code> &rarr; download the result.</p>
+  <p>Only 4 of 8 stills were animated, deliberately — motion was spent on the beats where it deepens the story (the overload breathing, the drift gap widening, the structure self-assembling, the ambient connective texture), and left as static art everywhere else. More loops isn't better; matched loops are.</p>
+
+  <h2>5. The 3D centerpiece</h2>
+  <p>"The Drift Field" is hand-written Three.js — no template. ~5,000 <code>THREE.Points</code> plus two <code>THREE.Line</code> ribbons. Two driver values (<code>drift</code>, <code>order</code>) are set from GSAP ScrollTrigger progress; every frame, each particle's position is a lerp between a wandering position and one of 7 fixed lattice targets (the 7 VBS elements), so scrolling visibly organizes chaos into a ring. No shader code required for this look — a CPU-side <code>mix()</code> per particle is enough at this particle count, which keeps the whole effect debuggable in one file instead of a GLSL pipeline.</p>
+
+  <h2>6. Assembly + iteration</h2>
+  <p>The page itself is plain HTML/CSS/JS — Lenis for smooth scroll, GSAP ScrollTrigger for reveals and the 3D uniforms, no build step, so it deploys to GitHub Pages as-is. After the first full pass, it went through <strong>three independent fine-tooth review passes</strong> (fresh model context each time, no memory of having written the code) hunting specifically for: contrast/legibility failures, motion that doesn't earn its cost, pacing problems for a narrated video walkthrough, and brand-consistency drift from the locked palette/type. Findings were fixed between each pass.</p>
+
+  <h2>7. Shipping it</h2>
+  <pre>gh repo create &lt;you&gt;/&lt;name&gt; --public
+git init &amp;&amp; git remote add origin &lt;repo url&gt;
+git add -A &amp;&amp; git commit -m "showcase" &amp;&amp; git push -u origin main
+gh api repos/&lt;you&gt;/&lt;name&gt;/pages -X POST -f "source[branch]=main" -f "source[path]=/"</pre>
+  <p>GitHub Pages serves this as a static site with zero build pipeline — the <code>/guide/</code> folder you're reading right now is just a second <code>index.html</code> at a sub-path, which is all a "route" is on Pages.</p>
+
+  <h2>Reproduce it yourself</h2>
+  <ol>
+    <li>Pick a real product/story you know well — generic placeholder content makes weak demos.</li>
+    <li>Get a creative-direction brief written first, separately from the build — hex codes and named fonts up front save every downstream decision.</li>
+    <li>Generate a small, cohesive image set (a shared style paragraph, not one-off prompts) before reaching for video.</li>
+    <li>Animate only the moments that need motion. Static art is often the better choice.</li>
+    <li>Build 3D as a value-mix between two known states driven by scroll — not a physics simulation — if you want it shippable in one sitting.</li>
+    <li>Review your own work adversarially, more than once, before calling it done.</li>
+  </ol>
+
+  <p style="margin-top:60px;opacity:0.6;font-size:13px">Built by Claude (Anthropic) · directed by Wouter van de Velde · <a href="../">back to Order From Drift</a></p>
+</div>
+</body>
+</html>

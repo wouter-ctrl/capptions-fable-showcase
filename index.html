@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Order From Drift — Seveso Control by Capptions (AI capability showcase)</title>
+<meta name="description" content="A showcase rebuild of Capptions' Seveso Control story — built end-to-end by Claude (Anthropic) to demonstrate AI-driven web design, 3D, and generative asset pipelines.">
+<meta name="theme-color" content="#0A0E27">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap">
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body data-world="dark">
+
+<div id="drift-3d" class="drift-3d-fixed" style="background-image:url('assets/img/beat8-dashboard-bg.webp')"></div>
+
+<nav class="nav">
+  <a class="nav__brand" href="#top">ORDER FROM <b>DRIFT</b></a>
+  <div class="nav__links">
+    <a href="#command-center">Platform</a>
+    <a href="/guide/">How this was built</a>
+    <a href="#resolved">Get in touch</a>
+  </div>
+</nav>
+
+<main id="top">
+
+  <!-- BEAT 1 — COLD OPEN -->
+  <section class="beat beat--hero" id="beat-1" data-beat="1">
+    <div class="beat__scrim"></div>
+    <div class="beat__content">
+      <p class="eyebrow">Seveso-III &middot; BRZO &middot; Safety Management</p>
+      <h1 class="beat__statement">Somewhere, right now, a plant is running on <em>someone's memory</em>.</h1>
+      <p class="beat__sub">Seven regulatory elements. One overloaded head holding them all together — until it can't.</p>
+    </div>
+  </section>
+
+  <!-- BEAT 2 — THE OVERLOAD -->
+  <section class="beat" id="beat-2" data-beat="2">
+    <video class="beat__loop-video" muted playsinline loop autoplay preload="auto" style="opacity:0.28">
+      <source src="assets/video/beat7-ambient.mp4" type="video/mp4">
+    </video>
+    <img class="beat__bg" src="assets/img/beat2-overload.webp" alt="" style="opacity:0.7">
+    <div class="beat__scrim"></div>
+    <div class="beat__content">
+      <p class="beat__number">01 / The Overload</p>
+      <h2 class="beat__statement">One head. Seven regulatory elements. <em>Ten mailboxes</em>.</h2>
+      <p class="beat__sub">PBZO here, safety reports there, action lists scattered across every inbox. It doesn't scale — it just gets heavier.</p>
+    </div>
+  </section>
+
+  <!-- BEAT 3 — THE DRIFT (3D hero moment) -->
+  <section class="beat" id="beat-3" data-beat="3">
+    <video class="beat__loop-video" muted playsinline loop autoplay preload="auto" poster="assets/img/beat3-drift.webp">
+      <source src="assets/video/beat3-drift.mp4" type="video/mp4">
+    </video>
+    <div class="beat__scrim"></div>
+    <div class="beat__content">
+      <p class="beat__number">02 / The Drift</p>
+      <h2 class="beat__statement">Documents say one thing. <em>The shop floor</em> does another.</h2>
+      <p class="beat__sub">The gap between them is your risk. It doesn't announce itself — it drifts, quietly, until an inspector finds it first.</p>
+      <p class="eyebrow" style="margin-top:28px">Compliance gap &middot; <span id="gap-readout">00.0%</span></p>
+    </div>
+  </section>
+
+  <!-- BEAT 4 — THE REFRAME -->
+  <section class="beat" id="beat-4" data-beat="4">
+    <video class="beat__loop-video" muted playsinline loop autoplay preload="auto" poster="assets/img/beat4-reframe.webp">
+      <source src="assets/video/beat4-reframe.mp4" type="video/mp4">
+    </video>
+    <div class="beat__scrim"></div>
+    <div class="beat__content">
+      <p class="beat__number">03 / The Reframe</p>
+      <h2 class="beat__statement">Compliance was never memory-work. <em>It's infrastructure</em>.</h2>
+      <p class="beat__sub">The moment the burden becomes a built thing — engineered, not remembered.</p>
+    </div>
+  </section>
+
+  <!-- BEAT 5 — COMMAND CENTER -->
+  <section class="beat" id="beat-5" data-beat="5">
+    <img class="beat__bg" src="assets/img/beat5-command-center.webp" alt="" style="opacity:0.5">
+    <div class="beat__scrim"></div>
+    <div class="beat__content" style="max-width:900px">
+      <p class="beat__number">04 / The Command Center</p>
+      <h2 class="beat__statement">One system. <em>Seven elements</em>. All green. Always.</h2>
+      <div class="dash" id="command-center">
+        <span class="eyebrow">Seveso Control&trade; &middot; VBS status</span>
+        <div class="dash__grid">
+          <div class="dash__card"><span class="dash__el"><b>01</b>Organisation &amp; personnel</span><span class="dash__status"><span class="dash__dot"></span>Ready</span></div>
+          <div class="dash__card"><span class="dash__el"><b>02</b>Hazard identification</span><span class="dash__status"><span class="dash__dot"></span>Ready</span></div>
+          <div class="dash__card"><span class="dash__el"><b>03</b>Operational control</span><span class="dash__status"><span class="dash__dot"></span>Ready</span></div>
+          <div class="dash__card"><span class="dash__el"><b>04</b>Change management</span><span class="dash__status"><span class="dash__dot"></span>Ready</span></div>
+          <div class="dash__card"><span class="dash__el"><b>05</b>Emergency planning</span><span class="dash__status"><span class="dash__dot"></span>Ready</span></div>
+          <div class="dash__card"><span class="dash__el"><b>06</b>Performance monitoring</span><span class="dash__status"><span class="dash__dot"></span>Ready</span></div>
+          <div class="dash__card"><span class="dash__el"><b>07</b>Audit &amp; review</span><span class="dash__status"><span class="dash__dot"></span>Ready</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEAT 6 — AUDIT-READY (resolved, warm) -->
+  <section class="beat beat--resolved" id="beat-6" data-beat="6">
+    <img class="beat__bg" src="assets/img/beat6-audit-ready.webp" alt="" style="opacity:0.22">
+    <div class="beat__content" id="resolved">
+      <p class="beat__number">05 / Audit-Ready</p>
+      <h2 class="beat__statement">When the inspector walks in, <em>you don't scramble</em>.</h2>
+      <p class="beat__sub">You just open it. One system, always current, always defensible.</p>
+      <a class="btn" href="mailto:hello@capptions.com">Talk to Capptions &rarr;</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <span>Order From Drift — a capability showcase for <strong>Capptions Seveso Control</strong>. Real product: capptions.com. This page: concept, code, art direction, and copy built end-to-end by <strong>Claude</strong> (Anthropic), directed by Wouter van de Velde.</span>
+  <a href="/guide/">Read how it was built &rarr;</a>
+</footer>
+
+<script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+<script src="js/drift-scene.js"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

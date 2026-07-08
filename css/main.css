@@ -1,0 +1,150 @@
+/* Order From Drift — Capptions Seveso Control showcase
+   Palette/type per DESIGN.md. */
+:root {
+  --abyss: #0A0E27;
+  --command: #141B4D;
+  --teal: #28E0C8;
+  --violet: #6C4CF0;
+  --coral: #FF6B54;
+  --gold: #F5C36B;
+  --bone: #F4F0E8;
+  --aurora: linear-gradient(120deg, var(--teal) 0%, var(--violet) 100%);
+  --display: 'Clash Display', 'Manrope', sans-serif;
+  --body: 'Manrope', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --radius: 18px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: auto; }
+body {
+  margin: 0;
+  background: var(--abyss);
+  color: var(--bone);
+  font-family: var(--body);
+  font-weight: 500;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+img, video { max-width: 100%; display: block; }
+a { color: inherit; }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+/* ---------- Nav ---------- */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px clamp(20px, 4vw, 56px);
+  background: linear-gradient(to bottom, rgba(10,14,39,0.85), transparent);
+  pointer-events: none;
+}
+.nav a { pointer-events: auto; }
+.nav__brand { font-family: var(--mono); font-size: 13px; letter-spacing: 0.08em; color: var(--bone); text-decoration: none; opacity: 0.85; }
+.nav__brand b { color: var(--gold); }
+.nav__links { display: flex; gap: 28px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; }
+.nav__links a { text-decoration: none; color: var(--bone); opacity: 0.7; }
+.nav__links a:hover { opacity: 1; color: var(--teal); }
+
+/* ---------- Beats (full-viewport sections) ---------- */
+.beat {
+  position: relative;
+  min-height: 100vh; min-height: 100svh;
+  display: flex; align-items: center;
+  padding: 120px clamp(20px, 6vw, 100px);
+  overflow: hidden;
+}
+.beat__bg {
+  position: absolute; inset: 0; z-index: 0;
+  object-fit: cover; opacity: 0.55;
+}
+.beat__scrim {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(180deg, rgba(10,14,39,0.35) 0%, rgba(10,14,39,0.75) 65%, var(--abyss) 100%);
+}
+.beat__content { position: relative; z-index: 2; max-width: 760px; }
+.beat__number { font-family: var(--mono); font-size: 13px; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 18px; }
+.beat__statement {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(32px, 5.4vw, 76px);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  margin: 0 0 24px;
+  text-wrap: balance;
+}
+.beat__statement em { font-style: normal; background: var(--aurora); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.beat__sub { font-size: clamp(16px, 1.3vw, 20px); color: rgba(244,240,232,0.72); max-width: 46em; text-wrap: pretty; }
+
+/* ---------- Hero / drift 3D (page-fixed, shows through transparent beat bgs) ---------- */
+.drift-3d-fixed {
+  position: fixed; inset: 0; z-index: 0;
+  background-size: cover; background-position: center;
+  opacity: 0.9; transition: opacity 0.6s ease;
+}
+.beat--hero .beat__scrim { background: linear-gradient(180deg, rgba(10,14,39,0.1) 0%, rgba(10,14,39,0.55) 70%, var(--abyss) 100%); }
+.beat, .footer, .nav { position: relative; z-index: 1; }
+
+/* ---------- Loop video moments ---------- */
+.beat__loop-video {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%; object-fit: cover; opacity: 0.65;
+}
+
+/* ---------- Dashboard (beat 5) ---------- */
+.dash {
+  position: relative; z-index: 2;
+  background: linear-gradient(160deg, rgba(20,27,77,0.85), rgba(10,14,39,0.92));
+  border: 1px solid rgba(40,224,200,0.18);
+  border-radius: var(--radius);
+  padding: clamp(20px, 3vw, 36px);
+  max-width: 900px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 40px 100px -30px rgba(0,0,0,0.6);
+}
+.dash__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 22px; }
+.dash__card {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 16px; border-radius: 12px;
+  background: rgba(244,240,232,0.03); border: 1px solid rgba(244,240,232,0.08);
+}
+.dash__card b { font-family: var(--mono); font-size: 11px; color: var(--gold); opacity: 0.8; margin-right: 8px; }
+.dash__el { font-size: 14px; font-weight: 600; }
+.dash__status { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--teal); }
+.dash__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 10px var(--teal); }
+
+/* ---------- CTA (beat 6, resolved / warm) ---------- */
+.beat--resolved { background: var(--bone); color: var(--command); }
+.beat--resolved .beat__sub { color: rgba(20,27,77,0.7); }
+.beat--resolved .beat__number { color: var(--coral); }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 30px; border-radius: 999px;
+  font-family: var(--mono); font-size: 13px; letter-spacing: 0.05em;
+  background: var(--aurora); color: var(--abyss); font-weight: 700;
+  text-decoration: none; margin-top: 32px;
+}
+
+/* ---------- Footer credit ---------- */
+.footer {
+  padding: 60px clamp(20px, 6vw, 100px) 80px;
+  background: var(--bone); color: var(--command);
+  display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; align-items: center;
+  font-family: var(--mono); font-size: 12px;
+}
+.footer a { text-decoration: underline; }
+
+@media (max-width: 720px) {
+  .beat { padding: 100px 20px 60px; }
+  .dash__grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
